@@ -129,108 +129,6 @@ The following environment variables are required to run the application:
 - **`JWT_SECRET`**: Secret key for signing JWT tokens.
 
 ---
-## API Endpoints
-
-### User Routes
-
-#### 1. **Register User**
-- **Endpoint**: `POST /users/register`
-- **Description**: Registers a new user.
-- **Request Body**:
-  ```json
-  {
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com",
-    "password": "password123"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "token": "JWT_TOKEN",
-    "user": {
-      "_id": "USER_ID",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
-  }
-  ```
-
----
-
-#### 2. **Login User**
-- **Endpoint**: `POST /users/login`
-- **Description**: Logs in an existing user.
-- **Request Body**:
-  ```json
-  {
-    "email": "john.doe@example.com",
-    "password": "password123"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "token": "JWT_TOKEN",
-    "user": {
-      "_id": "USER_ID",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
-  }
-  ```
-
----
-
-#### 3. **Get User Profile**
-- **Endpoint**: `GET /users/profile`
-- **Description**: Retrieves the profile of the authenticated user.
-- **Headers**:
-  ```json
-  {
-    "Authorization": "Bearer JWT_TOKEN"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "_id": "USER_ID",
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com"
-  }
-  ```
-
----
-
-#### 4. **Logout User**
-- **Endpoint**: `GET /users/logout`
-- **Description**: Logs out the authenticated user by blacklisting the token.
-- **Headers**:
-  ```json
-  {
-    "Authorization": "Bearer JWT_TOKEN"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "message": "Logout successful"
-  }
-  ```
-
----
 
 ### Captain Routes
 
@@ -357,18 +255,6 @@ The following environment variables are required to run the application:
   }
   ```
 
----
-
-## Environment Variables
-
-The following environment variables are required to run the application:
-
-- **`PORT`**: Port number for the server (default: `5000`).
-- **`DB_CONNECT`**: MongoDB connection string.
-- **`JWT_SECRET`**: Secret key for signing JWT tokens.
-
----
-
 ## How to Run
 
 1. Clone the repository.
@@ -385,8 +271,6 @@ The following environment variables are required to run the application:
 
 ---
 
-## Database Models
-
 ### User Model
 - **`fullname`**: Object containing `firstname` and `lastname`.
 - **`email`**: Unique email address.
@@ -398,13 +282,6 @@ The following environment variables are required to run the application:
 - **`email`**: Unique email address.
 - **`password`**: Hashed password.
 - **`vehicle`**: Object containing `color`, `plate`, `capacity`, and `vehicleType`.
-
-
-### User Model
-- **`fullname`**: Object containing `firstname` and `lastname`.
-- **`email`**: Unique email address.
-- **`password`**: Hashed password.
-- **`socketId`**: Optional field for storing socket ID.
 
 ### Blacklist Model
 - **`token`**: Blacklisted JWT token.
