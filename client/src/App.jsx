@@ -1,18 +1,20 @@
-import { useState } from "react";
-
+import React from "react";
+import { Routes, Router, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import UserLogin from "./pages/UserLogin";
+import UserSignup from "./pages/UserSignup";
+import CaptainLogin from "./pages/CaptainLogin";
+import CaptainSignup from "./pages/CaptainSignup";
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <button
-          onClick={() => setCount((count) => count + 1)}
-          className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-        >
-          Click Me {count}
-        </button>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<UserLogin />} />
+        <Route path="/signup" element={<UserSignup />} />
+        <Route path="/captain-login" element={<CaptainLogin />} />
+        <Route path="/captain-signup" element={<CaptainSignup />} />
+      </Routes>
     </>
   );
 }

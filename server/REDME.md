@@ -1,83 +1,173 @@
-cat << EOF > README.md
-# Jatayu Go Anywhere - Server
+# Jatayu Go Anywhere - Backend
 
-This is the server-side component of the Jatayu Go Anywhere project.
+This is the backend for the Jatayu Go Anywhere project, built using Node.js, Express, and MongoDB. It provides user authentication, registration, and profile management functionalities.
+
+---
 
 ## Project Structure
 
-\`\`\`
-server/
-│
-├── db/
-│   └── db.js
-│
-├── app.js
-├── server.js
-├── package.json
-└── README.md (this file)
-\`\`\`
+- **`server.js`**: Entry point of the application.
+- **`app.js`**: Configures middleware and routes.
+- **`routes/`**: Contains route definitions.
+- **`controllers/`**: Contains logic for handling requests.
+- **`middleware/`**: Contains middleware for authentication.
+- **`model/`**: Defines MongoDB schemas.
+- **`services/`**: Contains reusable service logic.
+- **`db/`**: Handles database connection.
 
-## File Documentation
+---
 
-### db/db.js
+## API Endpoints
 
-This file handles the MongoDB database connection.
+### User Routes
 
-\`\`\`javascript
-const mongoose = require("mongoose");
+#### 1. **Register User**
+- **Endpoint**: `POST /users/register`
+- **Description**: Registers a new user.
+- **Request Body**:
+  ```json
+  {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "password123"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "token": "JWT_TOKEN",
+    "user": {
+      "_id": "USER_ID",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
 
-const ConnectToDb = () => {
-  mongoose.connect(process.env.DB_CONNECT)
-    .then(() => {
-      console.log("✅ Connected to MongoDB");
-    })
-    .catch((err) => {
-      console.error("❌ MongoDB connection error:", err);
-    });
-};
+---
 
-module.exports = ConnectToDb;
-\`\`\`
+#### 2. **Login User**
+- **Endpoint**: `POST /users/login`
+- **Description**: Logs in an existing user.
+- **Request Body**:
+  ```json
+  {
+    "email": "john.doe@example.com",
+    "password": "password123"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "token": "JWT_TOKEN",
+    "user": {
+      "_id": "USER_ID",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
 
-- \`ConnectToDb\`: A function that establishes a connection to MongoDB using the \`DB_CONNECT\` environment variable.
-- It logs a success message on successful connection and an error message on failure.
+---
 
-### app.js
+#### 3. **Get User Profile**
+- **Endpoint**: `GET /users/profile`
+- **Description**: Retrieves the profile of the authenticated user.
+- **Headers**:
+  ```json
+  {
+    "Authorization": "Bearer JWT_TOKEN"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "_id": "USER_ID",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  }
+  ```
 
-(Add description and key components of app.js here)
+---
 
-### server.js
+#### 4. **Logout User**
+- **Endpoint**: `GET /users/logout`
+- **Description**: Logs out the authenticated user by blacklisting the token.
+- **Headers**:
+  ```json
+  {
+    "Authorization": "Bearer JWT_TOKEN"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "message": "Logout successful"
+  }
+  ```
 
-(Add description and key components of server.js here)
-
-### package.json
-
-This file contains metadata about the project and its dependencies.
-
-(Add key information from package.json, such as main scripts and important dependencies)
+---
 
 ## Environment Variables
 
-The application uses the following environment variables:
+The following environment variables are required to run the application:
 
-- \`DB_CONNECT\`: MongoDB connection string
+- **`PORT`**: Port number for the server (default: `5000`).
+- **`DB_CONNECT`**: MongoDB connection string.
+- **`JWT_SECRET`**: Secret key for signing JWT tokens.
 
-Make sure to set up a \`.env\` file in the root of the server directory with these variables.
+---
 
-## Getting Started
+## How to Run
 
-1. Clone the repository
-2. Navigate to the server directory
-3. Install dependencies: \`npm install\`
-4. Set up your \`.env\` file with the necessary environment variables
-5. Start the server: \`npm start\` (or the appropriate start script from package.json)
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the root directory and add the required environment variables.
+4. Start the server:
+   ```bash
+   npm start
+   ```
+5. The server will run at `http://localhost:5000`.
 
-## API Routes
+---
 
-(Document your API routes here when they are implemented)
+## Database Models
 
-## Models
+### User Model
+- **`fullname`**: Object containing `firstname` and `lastname`.
+- **`email`**: Unique email address.
+- **`password`**: Hashed password.
+- **`socketId`**: Optional field for storing socket ID.
 
-(Document your MongoDB models here when they are implemented)
+### Blacklist Model
+- **`token`**: Blacklisted JWT token.
+- **`createdAt`**: Timestamp for automatic expiration (24 hours).
 
-EOF
+---
+
+## Middleware
+
+### Authentication Middleware
+- **File**: `middleware/auth.middleware.js`
+- **Functionality**: Verifies JWT tokens and checks if the token is blacklisted.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
