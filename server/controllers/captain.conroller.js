@@ -7,11 +7,14 @@ const blackListModel = require("../model/balckList.model");
 module.exports.registerCaptain = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log("Validation Error Details:", errors.array());
     return res.status(400).json({ errors: errors.array() });
   }
 
   const { fullname, email, password, vehicle } = req.body;
+
   const isCaptainAlreadyExist = await captainModel.findOne({ email });
+  // Log full data
   if (isCaptainAlreadyExist) {
     return res.status(400).json({ message: "Captain already exist" });
   }
@@ -36,9 +39,12 @@ module.exports.registerCaptain = async (req, res, next) => {
 
 module.exports.loginCaptain = async (req, res, next) => {
   const errors = validationResult(req);
+  console.log("Received data in backend:", req.body); // Log full data
   if (!errors.isEmpty()) {
+    console.log("Validation Error Details:", errors.array()); // Log error details
     return res.status(400).json({ errors: errors.array() });
   }
+
   const { email, password } = req.body;
   const captain = await captainModel.findOne({ email }).select("+password");
   if (!captain) {

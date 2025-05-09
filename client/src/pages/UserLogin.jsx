@@ -1,24 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/jatayu-logo.png";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserContextData } from "../context/UserContext";
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
+  const { user, setUser } = useContext(UserContextData);
+  const Navigate = useNavigate();
+  console.log(user); // Example usage to avoid the unused variable error
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      alert("Please fill in both fields.");
-      return;
-    }
-    const data = {
+    const userData = {
       email: email,
       password: password,
     };
-    console.log("Login data:", data);
-    
-    setEmail('')
-    setPassword('')
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/users/login`,
+      userData
+    );
+    if(response.status === 200) {
+      const data = response.data;
+      setUser(data.user);
+      localStorage.setItem("token", data.token);
+      Navigate("/home");
+    }
+    setEmail("");
+    setPassword("");
     // Add your login logic here
   };
 

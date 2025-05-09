@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/jatayu-logo.png";
+import axios from "axios";
+import { UserContextData } from "../context/UserContext";
 
 const UserSignup = () => {
   const [firstName, setFirstName] = useState("");
@@ -8,36 +10,34 @@ const UserSignup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const Navigate = useNavigate();
+  const { user, setUser } = useContext(UserContextData);
+  console.log(user); // Example usage to avoid the unused variable error
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const signupData = { fullName: { firstName, lastName }, email, password };
-    console.log("User signup data:", signupData);
+    const signupData = { 
+      fullname: {
+         firstname:firstName,
+         lastname:lastName
+         },
+         email:email,
+         password:password
+      };
+    
 
-    // Example: Send data to backend
-    // fetch("/api/captain-signup", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(signupData),
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("Signup failed");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log("Captain signup successful:", data);
-    //     // Perform further actions like redirecting
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //     alert("Signup failed. Please try again.");
-    //   });
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/users/register`,
+      signupData
+    );
+    if (response.status === 200) {
+      const data = response.data;
+      setUser(data.user);
+      localStorage.setItem("token", data.token);
+      Navigate("/home");
+    }
 
-    // Clear form fields
     setFirstName("");
     setLastName("");
     setEmail("");
@@ -120,7 +120,7 @@ const UserSignup = () => {
             type="submit"
             className="w-full bg-black cursor-pointer text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300"
           >
-            Signup
+            Create Account
           </button>
         </form>
         <p className="text-sm text-gray-600 mt-4 text-center">

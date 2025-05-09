@@ -1,45 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/jatayu-logo.png";
-
+import { CaptainDataContext } from "../context/CaptainContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const CaptainLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setCaptain } = useContext(CaptainDataContext);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const loginData = { 
+      email: email,
+      password: password
+    };
 
-    if (email.trim() === "" || password.trim() === "") {
-      alert("Please fill in both fields.");
-      return;
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/captains/login`,
+      loginData
+    );
+    if (response.status === 200 || response.status === 201) {
+      const data = response.data;
+      setCaptain(data.captain);
+      localStorage.setItem("token", data.token);
+      navigate("/captain-home");
     }
 
-    const loginData = { email, password };
-    console.log("Captain login data:", loginData);
-    // Example: Send data to backend
-    // fetch("/api/captain-login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(loginData),
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("Login failed");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log("Captain login successful:", data);
-    //     // Perform further actions like redirecting
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //     alert("Login failed. Please try again.");
-    //   });
-
-    // Clear form fields
     setEmail("");
     setPassword("");
   };
@@ -92,13 +80,16 @@ const CaptainLogin = () => {
             type="submit"
             className="w-full bg-black cursor-pointer text-white py-2 px-4 rounded-md hover:bg-gray-800 transition duration-300"
           >
-            Login
+            Captain Login
           </button>
         </form>
         <p className="text-sm text-gray-600 mt-4 text-center">
           Don't have an account?{" "}
-          <Link to="/captain-signup" className="text-indigo-600 hover:underline">
-            Register as a Captain 
+          <Link
+            to="/captain-signup"
+            className="text-indigo-600 hover:underline"
+          >
+            Register as a Captain
           </Link>
         </p>
         <Link
