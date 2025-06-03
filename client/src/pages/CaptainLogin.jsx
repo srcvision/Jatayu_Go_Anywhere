@@ -34,7 +34,7 @@ const CaptainLogin = () => {
 
   return (
     <div className="relative min-h-screen bg-gray-100 flex items-center justify-center">
-      <img src={logo} alt="logo" className="absolute top-0.5 left-4 w-56" />
+      <img src={logo} alt="logo" className="absolute top-0.5 left-4 w-36" />
 
       {/* Login Form */}
       <div className="bg-white shadow-lg rounded-lg pt-0.5 p-8 w-full max-w-md">

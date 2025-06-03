@@ -7,7 +7,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ConfirmRidePopup from "../components/ConfirmRidePopup";
 const CaptainHome = () => {
-  const [ridePopupPanel, setRidePopupPanel] = useState(false);
+  const [ridePopupPanel, setRidePopupPanel] = useState(true);
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const ridePopupPanelRef = useRef(null);
   const confirmRidePanelRef = useRef(null);
@@ -69,16 +69,20 @@ const CaptainHome = () => {
       <div className="h-2/5 p-6">
         <CaptainDeatil />
       </div>
-      <div>
+      <div
+        ref={ridePopupPanelRef}
+        className="fixed bottom-0 z-10 bg-white w-full translate-y-full rounded-t-3xl shadow-lg"
+      >
         <RidePopUp
-          ref={ridePopupPanelRef}
           setRidePopupPanel={setRidePopupPanel}
           setConfirmRidePanel={setConfirmRidePanel}
         />
       </div>
-      <div>
+      <div
+        ref={confirmRidePanelRef}
+        className="fixed bottom-0 z-10  bg-white w-full translate-y-full rounded-t-3xl shadow-lg"
+      >
         <ConfirmRidePopup
-          ref={confirmRidePanelRef}
           setConfirmRidePanel={setConfirmRidePanel}
           setRidePopupPanel={setRidePopupPanel}
         />

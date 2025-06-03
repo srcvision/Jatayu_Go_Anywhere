@@ -1,11 +1,8 @@
-import React, { forwardRef } from "react";
+import React from "react";
 
-const RidePopUp = forwardRef((props, ref) => {
+const RidePopUp = (props) => {
   return (
-    <div
-      ref={ref}
-      className="fixed bottom-0 z-10 bg-white w-full translate-y-full rounded-t-3xl shadow-lg"
-    >
+    <div>
       {/* Close Button */}
       <button
         onClick={() => props.setRidePopupPanel(false)}
@@ -87,6 +84,6 @@ const RidePopUp = forwardRef((props, ref) => {
       </div>
     </div>
   );
-});
+};
 
 export default RidePopUp;
